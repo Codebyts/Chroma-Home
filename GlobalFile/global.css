@@ -1,0 +1,33 @@
+:root {
+    --primary-color: #182c63;
+    --secondary-color: #430707;
+    --text-color: #fff;
+    --background-color: #11101d;
+    --hover-color: #1e0707;
+    --icon-color: #fff;
+    --hover-text-color: #11101d;
+    --profile-bg-color: #1d1b31;
+    --btn-bg-color: #182c63;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+a {
+    text-decoration: none;
+}
+
+li {
+    list-style: none;
+}
+
+button {
+    padding: 5px 10px;
+    border-radius: 5px;
+    background: var(--btn-bg-color);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: background 0.3s ease;
+    width: fit-content;
+}

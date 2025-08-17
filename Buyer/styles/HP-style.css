@@ -1,0 +1,110 @@
+/* ===== Global Main Container ===== */
+main {
+    width: 100%;
+    padding: 0px 20px 20px 20px;
+}
+
+/* ===== Categories ===== */
+.category-item {
+    padding: 5px;
+    border-radius: 10px;
+    background: var(--profile-bg-color);
+    box-shadow: 4px 4px 16px rgba(0, 0, 0, .2);
+    color: aliceblue;
+    font-size: 20px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60px;
+    min-width: 6px;
+    transition: transform 0.2s ease;
+}
+
+.category-item:hover {
+    transform: translateY(-3px);
+}
+
+.category-item a {
+    color: var(--text-color);
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* ===== Cards ===== */
+.card {
+    border-radius: 10px;
+    background: var(--profile-bg-color);
+    box-shadow: 4px 4px 16px rgba(0, 0, 0, .2);
+    color: var(--text-color);
+    border: none;
+    overflow: hidden;
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.card img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.card h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 10px 0 5px;
+    color: var(--text-color);
+}
+
+.card p {
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+/* ===== Profile ===== */
+.profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.profile img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-name {
+    color: #333;
+    font-weight: 500;
+}
+
+.profile-link {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: #fff;
+    padding: 10px 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border-radius: 5px;
+    min-width: 150px;
+}
+
+.profile:hover .profile-link {
+    display: block;
+}
