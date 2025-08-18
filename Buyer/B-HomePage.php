@@ -205,7 +205,7 @@
         <ul class="side-menu">
             <li><a href="B-HomePage.php" class="active" id="homeBtn"><i class="fas fa-solid fa-house" style="color: #ffffff;"></i> Home</a></li>
             <li><a href="#" id="cartBtn" onclick="openPopup('productPopup')"><i class="fas fa-solid fa-cart-shopping" style="color: #ffffff;"></i> Cart</a></li>
-            <li><a href="#"><i class="fas fa-solid fa-message" style="color: #ffffff;"></i> Message</a></li>
+            <li><a href="MessagePage/MessagePage.php"><i class="fas fa-solid fa-message" style="color: #ffffff;"></i> Message</a></li>
             <li><a href="FavoritePage/Favorites.php"><i class="fas fa-solid fa-heart" style="color: #ffffff;"></i> Favorite</a></li>
         </ul>
     </section>
