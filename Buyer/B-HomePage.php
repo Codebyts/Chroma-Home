@@ -291,7 +291,7 @@
             <!-- End of Product Cards -->
         </main>
 
-         <!-- Cart Popup -->
+        <!-- Cart Popup -->
         <div class="popup-side" id="productPopup">
             <div class="popup-content wide">
             <div class="close-popup" onclick="closePopup('productPopup')">✖</div>
