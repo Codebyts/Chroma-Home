@@ -16,11 +16,14 @@
         exit();
     }
 
+    $userID = $_SESSION['userID'];
     $productID = (int)$_GET['productID'];
 
     // Fetch product details
-    $sql = "SELECT productID, product_name, description, stock, categoryID, price, image, create_at 
-            FROM product 
+    $sql = "SELECT p.productID, p.sellerID, p.product_name, p.description, p.stock, p.categoryID,
+                   p.price, p.image, p.create_at, u.name as seller, u.profile as seller_profile
+            FROM product p
+            JOIN users u ON p.sellerID = u.userID
             WHERE productID = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $productID);
@@ -120,6 +123,13 @@
 </head>
 
 <body>
+    <!-- POPUP MESSAGE BOX -->
+    <?php if (isset($_GET['message'])) { ?>
+        <div id="popup-message">
+            <p><?php echo $_GET['message']?></p>
+        </div>
+    <?php } ?>
+    <!-- POP MESSAGE BOX -->
     <!-- MAIN -->
     <main class="container py-4 d-flex flex-column gap-4">
         <section class="card shadow-sm p-3">
@@ -168,10 +178,17 @@
 
                         <!-- Buttons -->
                         <div class="d-flex gap-2 buttons">
+                            <form id="cart" method=post action="AddCart.php"> 
+                                <input type="hidden" name="productID" value="<?php echo $product['productID']; ?>">
+                            </form>
+                            <form id="buy" method="post" action="BuyNow.php">
+                                <input type="hidden" name="productID" value="<?php echo $product['productID']; ?>">
+                            </form>
+
                             <a href="FavoritePage/AddFavorite.php?productID=<?php echo $product['productID']; ?>"
                                 class="btn btn-outline-danger">❤</a>
-                            <button class="btn btn-outline-danger w-50">Add To Cart</button>
-                            <button class="btn btn-danger w-50">Buy Now ₱
+                            <button form="cart" class="btn btn-outline-danger w-50">Add To Cart</button>
+                            <button form="buy" class="btn btn-danger w-50">Buy Now ₱
                                 <?php echo number_format($product['price'], 2); ?>
                             </button>
                         </div>
@@ -184,14 +201,14 @@
             <div class="row align-items-center g-3">
                 <!-- Seller Image -->
                 <div class="col-auto">
-                    <img src="testimage.png" alt="seller image" 
+                    <img src="../Seller/<?php echo htmlspecialchars($product['seller_profile']); ?>" alt="seller image" 
                         class="img-fluid rounded-circle" 
                         style="width: 100px; height: 100px; object-fit: cover;">
                 </div>
 
                 <!-- Seller Info + Actions -->
                 <div class="col-auto">
-                    <h1 class="mb-2" style="font-size: 30px;">[seller name]</h1>
+                    <h1 class="mb-2" style="font-size: 30px;"><?php echo $product['seller']?></h1>
                     <a href="">
                         <button class="btn btn-danger">💬 Chat Now</button>
                     </a>
@@ -235,6 +252,8 @@
 
     <script src="../../bootstrap-5.3.7-dist/js/bootstrap.bundle.min.js"></script>
     <script src="../GlobalFile/nav-side.js"></script>
+    <script src="../GlobalFile/popup-message.js"></script>
+
     <script>
     function openModal(description) {
         document.getElementById("fullDesc").innerText = description;

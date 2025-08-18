@@ -55,8 +55,8 @@
     <section id="sidebar">
         <ul class="side-menu">
             <li><a href="../B-HomePage.php" ><i class="fas fa-solid fa-house" style="color: #ffffff;"></i> Home</a></li>
-            <li><a href="#"><i class="fas fa-solid fa-cart-shopping" style="color: #ffffff;"></i> Cart</a></li>
-            <li><a href="../MessagePage/MessagePage.html"><i class="fas fa-solid fa-message"
+            <li><a href="../CartPage.php"><i class="fas fa-solid fa-cart-shopping" style="color: #ffffff;"></i> Cart</a></li>
+            <li><a href=""><i class="fas fa-solid fa-message"
                         style="color: #ffffff;"></i> Message</a></li>
             <li><a href="Favorites.php" class="active"><i class="fas fa-solid fa-heart" style="color: #ffffff;"></i>
                     Favorite</a></li>
@@ -108,6 +108,11 @@
                                 <h2><?php echo htmlspecialchars($row['product_name']); ?></h2>
                                 <p>₱<?php echo number_format($row['price'], 2); ?></p>
                             </a>
+                            <form action="AddFavorite.php" method="post">
+                                <input type="hidden" name="productID" value="<?php echo $row['productID']; ?>">
+                                <input type="hidden" name="status" value="favorite">
+                                <button>Remove</button>
+                            </form>
                         </div>
                     </div>
                 <?php endwhile; ?>

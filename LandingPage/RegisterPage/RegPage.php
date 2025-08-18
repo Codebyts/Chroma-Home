@@ -8,6 +8,8 @@
         $email    = trim($_POST['email']);
         $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
         $role     = trim($_POST['role']);
+        $province = $_POST['province'] ?? '';
+        $city = $_POST['location'] ?? '';
         $verified_code = (string)rand(100000, 999999);
 
         // Check if email already exists
@@ -20,10 +22,20 @@
             echo "Email already registered.";
             exit();
         }
+        $check->close();
 
+        $loc_stmt = $conn->prepare("SELECT id FROM location WHERE province = ? AND city = ? LIMIT 1");
+        $loc_stmt->bind_param("ss", $province, $city);
+        $loc_stmt->execute();
+        $loc_stmt->bind_result($locationID);
+        if (!$loc_stmt->fetch()) {
+            $_SESSION['error'] = "Invalid province or city selected.";
+            exit;
+        }
+        $loc_stmt->close();
         // Insert into database
-        $stmt = $conn->prepare("INSERT INTO users (name, email, password, role, verified_code, verified) VALUES (?, ?, ?, ?, ?, 0)");
-        $stmt->bind_param("sssss", $name, $email, $password, $role, $verified_code);
+        $stmt = $conn->prepare("INSERT INTO users (name, email, password, role, locationID, verified_code, verified) VALUES (?, ?, ?, ?, ?, ?, 0)");
+        $stmt->bind_param("ssssis", $name, $email, $password, $role, $locationID, $verified_code);
 
         if ($stmt->execute()) {
             // Send email
@@ -328,7 +340,7 @@
                     <i class="bx bx-lock-alt"></i>
                     <div class="login__box-input">
                         <label>Province:</label><br>
-                        <select id="province" onchange="loadCities()" required>
+                        <select id="province" name="province" onchange="loadCities()" required>
                             <option value="">Select Province</option>
                         </select>
                     </div>
@@ -393,7 +405,7 @@
 
             locationData.filter(item => item.province === province).forEach(cityItem => {
                 let opt = document.createElement("option");
-                opt.value = cityItem.id;
+                opt.value = cityItem.city;
                 opt.textContent = cityItem.city;
                 citySelect.appendChild(opt);
             });
