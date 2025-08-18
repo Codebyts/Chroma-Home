@@ -123,14 +123,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             align-items: center;
         }
 
-        .login__img {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-        }
-
         .login__form {
             position: relative;
             background-color: hsla(0, 0%, 10%, 0.1);
