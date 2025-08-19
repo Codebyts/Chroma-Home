@@ -22,7 +22,26 @@
     $profileImage = (!empty($userData['profile'])) ? $userData['profile'] : "default.png";
 
     // Read category from GET (but do NOT store in session)
-    $categoryFilter = isset($_GET['category']) ? (int)$_GET['category'] : 0;
+    // One-time category filter: apply on click, ignore on reload
+    $categoryFilter = 0;
+
+    if (isset($_GET['category'])) {
+        $clickedCategory = (int) $_GET['category'];
+
+        // If this is the first load after clicking a category link, apply the filter.
+        // If the same category is already marked in session, treat it as a reload and show ALL.
+        if (!isset($_SESSION['category_once']) || (int)$_SESSION['category_once'] !== $clickedCategory) {
+            $categoryFilter = $clickedCategory;          // apply filter
+            $_SESSION['category_once'] = $clickedCategory; // mark as consumed
+        } else {
+            // Reload (F5/back/soft refresh) with same ?category -> reset to ALL
+            $categoryFilter = 0;
+            unset($_SESSION['category_once']); // allow filtering again on next click
+        }
+    } else {
+        // No category in URL -> normal ALL products; also clear marker so next click filters again
+        unset($_SESSION['category_once']);
+    }
 
     // Build SQL query based on category filter
     if ($categoryFilter > 0) {
