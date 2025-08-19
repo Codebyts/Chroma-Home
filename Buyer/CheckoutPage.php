@@ -116,14 +116,16 @@
                     $grandTotal = 0;
                     
                     if (isset($_POST['products'])) {
+                        $conditions = [];
                         foreach ($_POST['products'] as $productID => $quantity) {
-                        // sanitize values
+
                             $productID = intval($productID);
                             $quantity = intval($quantity);
 
-                        // only process items with quantity > 0
                             if ($quantity > 0) {
-                                // Fetch product details from the database
+
+                                $conditions[] = "c.productID = " . $productID;
+
                                 $sqlProduct = "SELECT product_name, price, image FROM product WHERE productID = ?";
                                 $stmtProduct = $conn->prepare($sqlProduct);
                                 $stmtProduct->bind_param("i", $productID);
@@ -145,9 +147,12 @@
                         </tr>
                     </tbody>
                     <?php 
-                    $orderTotal += $quantity;
-                    $grandTotal += $itemSubtotal;
-                                 }
+                                    $orderTotal += $quantity;
+                                    $grandTotal += $itemSubtotal;
+                    ?>
+                                    <input type="hidden" name="products[<?php echo $productID; ?>][quantity]" value="<?php echo $quantity; ?>" form="placeorder">
+                                    <input type="hidden" name="products[<?php echo $productID; ?>][price]" value="<?php echo $productPrice; ?>" form="placeorder">
+                    <?php       }
                             }
                         }
                     }
@@ -180,10 +185,44 @@
                     </div>
                     <hr width="100%">
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <form action="checkout.php" method="post"> 
-                            <input type="hidden" name="products[<?php echo $productID ?>]" value="<?php echo $quantity ?>">
+                        <form id="placeorder" action="CheckoutFunction.php" method="post"> 
+                            <?php
+                                // Process for CartID of placed orders
+                                if (count($conditions) > 1) {
+                                    $concatProductID = implode(" OR ", $conditions);
+                                } else {
+                                    $concatProductID = $conditions[0]; 
+                                } 
+                                
+                                $sqlCart = "SELECT c.cartID, c.productID
+                                            FROM cart c
+                                            JOIN product p ON c.productID = p.productID
+                                            WHERE c.userID = ? AND $concatProductID";
+                                $stmtCart = $conn->prepare($sqlCart);
+                                $stmtCart->bind_param("i", $sellerID);
+                                $stmtCart->execute();
+                                $resultCart = $stmtCart->get_result();
+
+                                $cart_whereConditions = []; 
+                                while ($row = $resultCart->fetch_assoc()) {
+                                    $cartID = htmlspecialchars($row['cartID']);
+
+                                    $cart_whereConditions[] = "cartID = " . $row['cartID'];
+                                }
+
+                                if (count($cart_whereConditions) > 1) {
+                                    $concatProductID = implode(" OR ", $cart_whereConditions);
+                                } else {
+                                    $concatProductID = $cart_whereConditions[0]; // only one element
+                                } 
+
+                                $concatCartID = implode(" OR ", $cart_whereConditions);
+                                // Array for productID and quantity
+
+                            ?>
+                            <input type="hidden" name="cartIDs" value="<?php echo $concatCartID ?>">
                             <input type="hidden" name="grandTotal" id="grandTotal" value="<?php echo $grandTotal ?>">
-                            <button class="btn btn-danger" type="button">Place Order</button>
+                            <button class="btn btn-danger" type="submit">Place Order</button>
                         </form>
                     </div>
                 </div>

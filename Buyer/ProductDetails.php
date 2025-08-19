@@ -21,7 +21,7 @@
 
     // Fetch product details
     $sql = "SELECT p.productID, p.sellerID, p.product_name, p.description, p.stock, p.categoryID,
-                   p.price, p.image, p.create_at, u.name as seller, u.profile as seller_profile
+                   p.price, p.image, p.create_at, u.name as seller, u.profile as seller_profile, u.created_at
             FROM product p
             JOIN users u ON p.sellerID = u.userID
             WHERE productID = ?";
@@ -36,6 +36,43 @@
     }
 
     $product = $result->fetch_assoc();
+
+    $sqlProductNumber = "SELECT COUNT(productID) AS count FROM product WHERE sellerID = ?;";
+    $stmtProductNumber = $conn->prepare($sqlProductNumber);
+    $stmtProductNumber->bind_param("i", $product['sellerID']);
+    $stmtProductNumber->execute();
+    $resultProductNumber = $stmtProductNumber->get_result();
+    $productNumber = $resultProductNumber->fetch_row()[0];
+
+    $joinDate = new DateTime($product['created_at']);
+    // $joinDate = new DateTime("2025-08-19"); // This variable is for testing purposes
+    $dateToday = new DateTime(date("Y-m-d H:i:s", time()));
+
+    $dateDifference = $joinDate->diff($dateToday);
+
+    $totalMonths = ($dateDifference->y * 12) + $dateDifference->m;
+
+    if ($totalMonths == 0) {
+        if ($dateDifference->d == 1) {
+            $joined = $dateDifference->d . " day";
+        } else if ($dateDifference->d > 1) {
+            $joined = $dateDifference->d . " days";
+        } else {
+            $joined = "Today";
+        }
+    } else if ($totalMonths < 12) {
+        if ($dateDifference->m == 1) {
+            $joined = $totalMonths . " month";
+        } else {
+            $joined = $totalMonths . " months";
+        } 
+    } else if ($totalMonths >= 12) {
+        if ($dateDifference->y == 1) {
+            $joined = $dateDifference->y . " year";
+        } else {
+            $joined = $dateDifference->y . " years";
+        }
+    } 
 ?>
 
 <!DOCTYPE html>
@@ -182,9 +219,11 @@
                             <form id="cart" method=post action="AddCart.php"> 
                                 <input type="hidden" name="productID" value="<?php echo $product['productID']; ?>">
                             </form>
-                            <form id="buy" method="post" action="BuyNow.php">
-                                <input type="hidden" name="productID" value="<?php echo $product['productID']; ?>">
+                            <form id="buy" method="post" action="CheckoutPage.php">
+                                <input type="hidden" name="products[<?php echo $product['productID']; ?>]" value="1">
                             </form>
+                            <!-- MUST submit: grandTotal = productID, price -->
+                            <!-- Already defined: quantity = 1, price = SQL -->
 
                             <a href="FavoritePage/AddFavorite.php?productID=<?php echo $product['productID']; ?>"
                                 class="btn btn-outline-danger">❤</a>
@@ -218,8 +257,13 @@
                 <!-- Divider + Stats (inline labels + numbers) -->
                 <div class="col-auto border-start ps-4">
                     <div class="d-flex flex-column">
-                        <p class="mb-2 fw-bold">Product: <span class="fw-normal">25</span></p>
-                        <p class="mb-0 fw-bold">Joined: <span class="fw-normal">2 years</span></p>
+                        <?php if ($productNumber === 1)  { ?>
+                            <p class="mb-2 fw-bold">Product: <span class="fw-normal"><?php echo $productNumber?></span></p>
+                        <?php } else if ($productNumber > 1) { ?>
+                            <p class="mb-2 fw-bold">Products: <span class="fw-normal"><?php echo $productNumber?></span></p>
+                        <?php } ?>
+
+                        <p class="mb-0 fw-bold">Joined: <span class="fw-normal"><?php echo $joined ?></span></p>
                     </div>
                 </div>
             </div>
