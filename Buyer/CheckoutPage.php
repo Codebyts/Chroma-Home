@@ -94,14 +94,14 @@
                 <!-- Product Image -->
                 <div class="col-md-12">
                     <p style="padding: 0; margin: 0;color: #d9534f;">Delivery Address</p>
-                    <p class="buyer-details"><strong><?php echo $userData['name']." ".$userData['email'] ?></strong> <?php echo $userData['city'].", ".$userData['province'].", ".$userData['region'] ?></p>
+                    <p class="buyer-details"><strong><?php echo $userData['name']." &nbsp● ".$userData['email'] ?></strong> &nbsp● <?php echo $userData['city'].", ".$userData['province'].", ".$userData['region'] ?></p>
                 </div>
             </div>
         </section>
 
         <section class="card shadow-sm p-3">
             <div class="row g-4 table-responsive">
-                <table class="table table-striped-columns">
+                <table class="table table-striped-columns text-center">
                     <thead>
                         <tr>
                             <th scope="col">Product Ordered</th>
@@ -140,7 +140,7 @@
                     ?> 
                     <tbody>
                         <tr>
-                            <th scope="row"><img src="<?php echo $productImage ?>" alt="No Image"><?php echo $productName ?></th>
+                            <th scope="row"><img src="../uploads/products/<?php echo $productImage ?>" alt="No Image" style="width: 50px;"> &nbsp <?php echo $productName ?></th>
                             <td><?php echo "₱".number_format($productPrice, 2) ?></td>
                             <td><?php echo $quantity ?></td>
                             <td><?php echo "₱".number_format($itemSubtotal, 2) ?></td>
@@ -173,7 +173,7 @@
                                 data-bs-toggle="button">Credit/Debit Card</a>
                             <a class="btn disabled" aria-disabled="true" role="button" data-bs-toggle="button">Payment
                                 Center / E-Wallet</a>
-                            <a href="#" class="btn active" role="button" data-bs-toggle="button"
+                            <a href="#" class="btn btn-outline-danger" role="button" data-bs-toggle="button"
                                 aria-pressed="true">Cash on Delivery</a>
                         </p>
                     </div>

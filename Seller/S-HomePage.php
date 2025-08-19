@@ -18,7 +18,7 @@
     $sellerName = $user ? $user['name'] : "Seller";
 
     // Fetch products
-    $sql = "SELECT p.productID, p.product_name, p.description, p.stock, p.categoryID, p.price, p.image, p.create_at, c.categoryName
+    $sql = "SELECT p.productID, p.product_name, p.description, p.stock, p.categoryID, p.price, p.image, p.create_at, c.name
         FROM product p
         JOIN category c ON p.categoryID = c.categoryID
         WHERE p.sellerID = ?";

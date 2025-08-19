@@ -446,22 +446,22 @@
             <!-- Categories -->
             <div class="row g-3">
                 <div class="col-6 col-md-3 col-lg-2">
-                    <div class="category-item"><a href="?category=2">Living Room</a></div>
+                    <div class="category-item"><a href="?category=2">🖥️ Living Room</a></div>
                 </div>
                 <div class="col-6 col-md-3 col-lg-2">
-                    <div class="category-item"><a href="?category=1">Kitchen Appliances</a></div>
+                    <div class="category-item"><a href="?category=1">🎛️ Kitchen Appliances</a></div>
                 </div>
                 <div class="col-6 col-md-3 col-lg-2">
-                    <div class="category-item"><a href="?category=5">Laundry Appliances</a></div>
+                    <div class="category-item"><a href="?category=5">🚽 Laundry Appliances</a></div>
                 </div>
                 <div class="col-6 col-md-3 col-lg-2">
-                    <div class="category-item"><a href="?category=3">Bedroom Appliances</a></div>
+                    <div class="category-item"><a href="?category=3">🛏️ Bedroom Appliances</a></div>
                 </div>
                 <div class="col-6 col-md-3 col-lg-2">
-                    <div class="category-item"><a href="?category=4">Bathroom Appliance</a></div>
+                    <div class="category-item"><a href="?category=4">🛁 Bathroom Appliance</a></div>
                 </div>
                 <div class="col-6 col-md-3 col-lg-2">
-                    <div class="category-item"><a href="?category=6">Outdoor Appliances</a></div>
+                    <div class="category-item"><a href="?category=6">🚜 Outdoor Appliances</a></div>
                 </div>
             </div>
 
