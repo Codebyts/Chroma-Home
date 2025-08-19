@@ -55,8 +55,7 @@
     <section id="sidebar">
         <ul class="side-menu">
             <li><a href="../B-HomePage.php" ><i class="fas fa-solid fa-house" style="color: #ffffff;"></i> Home</a></li>
-            <li><a href="../CartPage.php"><i class="fas fa-solid fa-cart-shopping" style="color: #ffffff;"></i> Cart</a></li>
-            <li><a href=""><i class="fas fa-solid fa-message"
+            <li><a href="../MessagePage/MessagePage.php"><i class="fas fa-solid fa-message"
                         style="color: #ffffff;"></i> Message</a></li>
             <li><a href="Favorites.php" class="active"><i class="fas fa-solid fa-heart" style="color: #ffffff;"></i>
                     Favorite</a></li>
