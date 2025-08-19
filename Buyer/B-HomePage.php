@@ -2,11 +2,28 @@
     session_start();
     include '../db.php';
 
+    $search = isset($_GET['search']) ? trim($_GET['search']) : '';
+
     // Redirect to login if not logged in
     if (!isset($_SESSION['userID'])) {
         header("Location: ../LandingPage/LoginPage.php");
         exit();
-    }
+    } else {
+        $sellerID = $_SESSION['userID'];
+        if ($search !== '') {
+            $sql = "SELECT productID, product_name, description, stock, categoryID, price, image, create_at 
+                    FROM product 
+                    WHERE stock <> 0 AND product_name LIKE ?";
+            $stmt = $conn->prepare($sql);
+            $like = "%$search%";
+            $stmt->bind_param("s", $sellerID, $like);
+        } else {
+            $sql = "SELECT productID, product_name, description, stock, categoryID, price, image, create_at 
+                    FROM product 
+                    WHERE stock <> 0";
+            $stmt = $conn->prepare($sql);
+        }
+    } 
 
     $sellerID = $_SESSION['userID'];
 
@@ -380,7 +397,7 @@
 
 </head>
 
-<body onload="showAlert()">
+<body>
     <!-- SIDEBAR -->
     <section id="sidebar">
         <ul class="side-menu">
@@ -396,10 +413,10 @@
     <section id="content">
         <nav>
             <button class="toggle-sidebar btn btn-outline-dark">☰</button>
-            <form action="#">
+            <form method="GET" action="index.php" style="width:90%;margin-right:auto;">
                 <div class="form-group">
-                    <input type="text" placeholder="Search...">
-                    <i class="fas fa-solid fa-magnifying-glass"></i>
+                    <input type="text" name="search" placeholder="Search product name..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                    <button type="submit" style="padding:6px 12px; border-radius:6px; border:none; background:#007bff; color:white;">Search</button>
                 </div>
             </form>
 
@@ -539,6 +556,18 @@
     <script src="../GlobalFile/nav-side.js"></script>
     <script src="../GlobalFile/popup-message.js"></script>
     <script>
+
+        document.querySelector('input[name="search"]').addEventListener('input', function() {
+            const q = this.value.toLowerCase();
+            document.querySelectorAll('.card h2').forEach(function(h2) {
+                const card = h2.closest('.col-12');
+                if (h2.innerText.toLowerCase().includes(q)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
 
         function openPopup(id) {
         document.getElementById(id).classList.add("active")
