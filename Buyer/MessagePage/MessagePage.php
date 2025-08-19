@@ -257,7 +257,7 @@ $stmt_contacts->close();
         <!-- Chat -->
         <div class="chat-container">
             <div class="chat-header">
-                <a href="../S-HomePage.php" class="btn btn-light me-2 d-flex align-items-center" style="border-radius: 50%; width: 30px; height: 30px; justify-content: center;">
+                <a href="../B-HomePage.php" class="btn btn-light me-2 d-flex align-items-center" style="border-radius: 50%; width: 30px; height: 30px; justify-content: center;">
                     <i class="fas fa-arrow-left"></i>
                 </a>
                 <i class="fas fa-bars hamburger" onclick="toggleContacts()"></i>
