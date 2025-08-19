@@ -22,6 +22,14 @@ li {
     list-style: none;
 }
 
+img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    object-position: center;
+    background-color: white;
+}
+
 button {
     padding: 5px 10px;
     border-radius: 5px;

@@ -53,7 +53,7 @@
     <!-- Bootstrap and font awesome -->
     <link rel="stylesheet" href="GlobalFile/bootstrap-5.3.7-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="GlobalFile/fontawesome-free-7.0.0-web/css/all.min.css">
-
+    <link rel="stylesheet" href="GlobalFile/global.css">
     <!-- Home Page styles -->
     <style>
         :root {
@@ -233,7 +233,6 @@
 
         .card img {
             max-width: 100%;
-            height: auto;
             border-radius: 5px;
         }
 
@@ -258,7 +257,6 @@
             <form method="GET" action="index.php" style="width:90%;margin-right:auto;">
                 <div class="form-group">
                     <input type="text" name="search" placeholder="Search product name..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
-                    <button type="submit" style="padding:6px 12px; border-radius:6px; border:none; background:#007bff; color:white;">Search</button>
                 </div>
             </form>
 

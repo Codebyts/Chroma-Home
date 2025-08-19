@@ -416,7 +416,6 @@
             <form method="GET" action="index.php" style="width:90%;margin-right:auto;">
                 <div class="form-group">
                     <input type="text" name="search" placeholder="Search product name..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
-                    <button type="submit" style="padding:6px 12px; border-radius:6px; border:none; background:#007bff; color:white;">Search</button>
                 </div>
             </form>
 
