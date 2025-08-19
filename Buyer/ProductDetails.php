@@ -130,6 +130,7 @@
         </div>
     <?php } ?>
     <!-- POP MESSAGE BOX -->
+    
     <!-- MAIN -->
     <main class="container py-4 d-flex flex-column gap-4">
         <section class="card shadow-sm p-3">
@@ -223,11 +224,6 @@
                 </div>
             </div>
         </section>
-
-
-
-
-
 
         <section class="card shadow-sm p-3">
             <div class="row g-4">

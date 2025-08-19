@@ -19,6 +19,7 @@
     $stmtProfile->execute();
     $resultProfile = $stmtProfile->get_result();
     $userData = $resultProfile->fetch_assoc();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -109,16 +110,50 @@
                             <th scope="col">Item Subtotal</th>
                         </tr>
                     </thead>
+
+                    <?php 
+                    $orderTotal = 0;
+                    $grandTotal = 0;
+                    
+                    if (isset($_POST['products'])) {
+                        foreach ($_POST['products'] as $productID => $quantity) {
+                        // sanitize values
+                            $productID = intval($productID);
+                            $quantity = intval($quantity);
+
+                        // only process items with quantity > 0
+                            if ($quantity > 0) {
+                                // Fetch product details from the database
+                                $sqlProduct = "SELECT product_name, price, image FROM product WHERE productID = ?";
+                                $stmtProduct = $conn->prepare($sqlProduct);
+                                $stmtProduct->bind_param("i", $productID);
+                                $stmtProduct->execute();
+                                $resultProduct = $stmtProduct->get_result();
+                                
+                                while ($row = $resultProduct->fetch_assoc()) {
+                                    $productName = htmlspecialchars($row['product_name']);
+                                    $productPrice = htmlspecialchars($row['price']);
+                                    $productImage = htmlspecialchars($row['image']);
+                                    $itemSubtotal = $productPrice * $quantity;
+                    ?> 
                     <tbody>
                         <tr>
-                            <th scope="row"><img src="" alt="No Image"> [Product Name]</th>
-                            <td>[Price]</td>
-                            <td>[12345]</td>
-                            <td>@mdo</td>
+                            <th scope="row"><img src="<?php echo $productImage ?>" alt="No Image"><?php echo $productName ?></th>
+                            <td><?php echo "₱".number_format($productPrice, 2) ?></td>
+                            <td><?php echo $quantity ?></td>
+                            <td><?php echo "₱".number_format($itemSubtotal, 2) ?></td>
                         </tr>
                     </tbody>
+                    <?php 
+                    $orderTotal += $quantity;
+                    $grandTotal += $itemSubtotal;
+                                 }
+                            }
+                        }
+                    }
+                    ?>                   
                 </table>
-                <p class="text-end">Order Total (Total): <span>₱ [12345]</span></p>
+                <p class="text-end">Order Total (<?php echo $orderTotal ?>): <span><?php echo "₱".number_format($grandTotal, 2)?></span></p>
             </div>
         </section>
 
@@ -139,13 +174,17 @@
                     </div>
                     <hr>
                     <div class="total text-end">
-                        <p>Mechandise Subtotal: <span>₱ [12345]</span></p>
-                        <p>Shipping Subtotal: <span>₱ [12345]</span></p>
-                        <p>Total Payment: <span>₱ [12345]</span></p>
+                        <p>Mechandise Subtotal: <span><?php echo "₱".number_format($grandTotal, 2)?></span></p>
+                        <p>Shipping Subtotal: <span>₱0.00</span></p>
+                        <p>Total Payment: <span><?php echo "₱".number_format($grandTotal, 2)?></span></p>
                     </div>
                     <hr width="100%">
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <button class="btn btn-danger" type="button">Place Order</button>
+                        <form action="checkout.php" method="post"> 
+                            <input type="hidden" name="products[<?php echo $productID ?>]" value="<?php echo $quantity ?>">
+                            <input type="hidden" name="grandTotal" id="grandTotal" value="<?php echo $grandTotal ?>">
+                            <button class="btn btn-danger" type="button">Place Order</button>
+                        </form>
                     </div>
                 </div>
             </div>

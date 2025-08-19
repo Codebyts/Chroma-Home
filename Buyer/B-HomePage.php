@@ -315,7 +315,9 @@
                             <label for="quantity">Quantity:</label>
                             <input type="number" step="1" name="quantity" id="quantity" min="1"
                                    value="<?php echo $row['quantity']?>" oninput="calculateTotal()" required>
-                            <input type="hidden" name="products[<?php echo $row['productID']?>]" id="quantity_1" form="checkoutForm">
+
+                            <input type="hidden" name="products[<?php echo $row['productID']?>]" id="quantity_<?php echo $row['productID']?>" form="checkoutForm">
+
                             <strong>₱<?php echo number_format($row['price'], 2)?></strong>
                         </div>
                     </label>
@@ -324,15 +326,11 @@
 
             <!-- Fixed bottom -->
             <div class="cart-summary">
-                <form id="checkout" action="CheckoutPage.php" method="post">
-                    <input type="hidden" name="quantity" value="">
-                    <input type="hidden" name="productID" value="">
-                    <input type="hidden" name="totalPrice" id="totalPrice" value="">
-                </form>
+                
                 <span><strong>Total:</strong> <span id="totalPrice">₱0.00</span></span>
 
                 <form id="checkoutForm" action="checkoutPage.php" method="post">
-  <!-- Only one hidden for the grand total if you still want it -->
+                <!-- Only one hidden for the grand total if you still want it -->
                     <input type="hidden" name="grandTotal" id="grandTotal">
                     <button type="submit">Checkout</button>
                 </form>
@@ -407,10 +405,8 @@
                     let quantity = parseInt(quantityInput.value) || 1;
                     total += price * quantity;
 
-                    // ✅ Update hidden field
                     qtyField.value = quantity;
                 } else {
-                // Not checked → clear hidden value
                     qtyField.value = "";
                 }
             });
@@ -423,16 +419,8 @@
             }).format(total);
 
             document.getElementById('totalPrice').textContent = formatted;
-            document.getElementById('grandTotal').value = total; // raw number for PHP
-        }
-
-        // Remove this function if you will replace the alert (popup message). This is connected to <body> using the onoad attribute
-        // <?php if (isset($_GET['message'])) { ?>
-        //     function showAlert() {
-        //         alert("<?php echo htmlspecialchars($_GET['message']); ?>");
-        //     }
-        // <?php } ?>
-        
+            document.getElementById('grandTotal').value = total; 
+        }        
     </script>
 </body>
 
