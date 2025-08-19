@@ -210,7 +210,7 @@
                 <!-- Seller Info + Actions -->
                 <div class="col-auto">
                     <h1 class="mb-2" style="font-size: 30px;"><?php echo $product['seller']?></h1>
-                    <a href="">
+                    <a href="MessagePage/MessagePage.php?chatUser=<?php echo $product['sellerID']?>">
                         <button class="btn btn-danger">💬 Chat Now</button>
                     </a>
                 </div>
