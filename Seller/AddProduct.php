@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Handle image upload
     $image_name = null;
     if (!empty($_FILES['image']['name'])) {
-        $uploadDir = __DIR__ . '/uploads/products/';
+        $uploadDir = __DIR__ . '../../uploads/products/';
         if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
 
         $image_ext = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("issiiis", $userID, $product_name, $description, $stock, $categoryID, $price, $image_name);
 
     if ($stmt->execute()) {
-        header("Location: view_product.php");
+        header("Location: S-HomePage.php");
         exit();
     } else {
         echo "Error: " . $stmt->error;
