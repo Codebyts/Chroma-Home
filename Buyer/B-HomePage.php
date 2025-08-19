@@ -330,8 +330,6 @@
                 <span><strong>Total:</strong> <span id="totalPrice">₱0.00</span></span>
 
                 <form id="checkoutForm" action="checkoutPage.php" method="post">
-                <!-- Only one hidden for the grand total if you still want it -->
-                    <input type="hidden" name="grandTotal" id="grandTotal">
                     <button type="submit">Checkout</button>
                 </form>
             </div>
