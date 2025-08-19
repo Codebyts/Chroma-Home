@@ -214,7 +214,7 @@
     <h2>📦 My Products</h2>
     <a href="AddProduct.php" class="btn">➕ Add Product</a>
     <a href="EditProfile.php" class="btn" style="background:#28a745;">👤 Edit Profile</a>
-    <a href="" class="btn" style="background:#17a2b8;">💬 Messages</a>
+    <a href="MessagePage/MessagePage.php" class="btn" style="background:#17a2b8;">💬 Messages</a>
 
     <div class="product-grid">
         <?php while($row=$result->fetch_assoc()): ?>
