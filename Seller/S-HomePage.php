@@ -206,7 +206,7 @@
     <div class="nav-links" id="navLinks">
         <a href="S-HomePage.php" class="active">📦 PRODUCTS</a>
         <a href="SellerOrders.php">🛒 ORDERS</a>
-        <a href="../LandingPage/LoginPage.php">🚪 LOGOUT</a>
+        <a href="../index.php">🚪 LOGOUT</a>
     </div>
 </div>
 

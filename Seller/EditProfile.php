@@ -234,7 +234,7 @@ $currentCity     = $userData['city']     ?? '';
         <button type="submit" class="btn btn-save">Save Profile</button>
     </form>
 
-    <form action="view_products.php" method="get">
+    <form action="S-HomePage.php" method="get">
         <button type="submit" class="btn btn-back">Back</button>
     </form>
 </div>

@@ -246,7 +246,7 @@ while ($row = $result->fetch_assoc()) $categories[] = $row;
 <body>
 
 <div class="container">
-    <a href="view_product.php" class="back-btn">← Back to Products</a>
+    <a href="S-HomePage.php" class="back-btn">← Back to Products</a>
     <h2>➕ Add Product</h2>
     <form method="POST" enctype="multipart/form-data">
         <label>Product Name:</label>

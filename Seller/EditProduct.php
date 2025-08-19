@@ -152,7 +152,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <div class="container">
     <h2>✏️ Edit Product</h2>
-    <a class="back-link" href="view_product.php">← Back to Products</a>
+    <a class="back-link" href="S-HomePage.php">← Back to Products</a>
     <form method="POST" enctype="multipart/form-data">
         <label>Product Name</label>
         <input type="text" name="product_name" value="<?php echo htmlspecialchars($product['product_name']); ?>" required>
