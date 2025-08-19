@@ -188,6 +188,7 @@
                         <form id="placeorder" action="CheckoutFunction.php" method="post"> 
                             <?php
                                 // Process for CartID of placed orders
+                            if ($_POST['mode'] == "cart") {   
                                 if (count($conditions) > 1) {
                                     $concatProductID = implode(" OR ", $conditions);
                                 } else {
@@ -222,6 +223,11 @@
                             ?>
                             <input type="hidden" name="cartIDs" value="<?php echo $concatCartID ?>">
                             <input type="hidden" name="grandTotal" id="grandTotal" value="<?php echo $grandTotal ?>">
+                            <input type="hidden" name="mode" value="cart">
+                        <?php } else if ($_POST['mode'] == "buynow") { ?>
+                            <input type="hidden" name="grandTotal" id="grandTotal" value="<?php echo $grandTotal ?>">
+                            <input type="hidden" name="mode" value="buynow">
+                        <?php } ?>
                             <button class="btn btn-danger" type="submit">Place Order</button>
                         </form>
                     </div>

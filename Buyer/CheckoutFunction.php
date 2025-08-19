@@ -10,16 +10,18 @@ if (!isset($_SESSION['userID'])) {
 
 $sellerID = $_SESSION['userID'];
 
-if (isset($_POST['cartIDs']) && isset($_POST['grandTotal']) && isset($_POST['products'])) {
-    $concatCartID = $_POST['cartIDs'];
+if (isset($_POST['grandTotal']) && isset($_POST['products'])) {
     $grandTotal = $_POST['grandTotal'];
     $products = $_POST['products'];
-
-    $sqlRemoveCart = "DELETE FROM cart WHERE userID = ? AND ($concatCartID)";
-    $stmtRemoveCart = $conn->prepare($sqlRemoveCart);  
-    $stmtRemoveCart->bind_param("i", $sellerID);
-    $stmtRemoveCart->execute();
-    $stmtRemoveCart->close();
+    
+    if (isset($_POST['cartIDs']) && $_POST['mode'] == "cart") {
+        $concatCartID = $_POST['cartIDs'];
+        $sqlRemoveCart = "DELETE FROM cart WHERE userID = ? AND ($concatCartID)";
+        $stmtRemoveCart = $conn->prepare($sqlRemoveCart);  
+        $stmtRemoveCart->bind_param("i", $sellerID);
+        $stmtRemoveCart->execute();
+        $stmtRemoveCart->close();
+    }
 
     $sqlInsertOrder = "INSERT INTO orders (buyerID, total_price) VALUES (?, ?)";
     $stmtInsertOrder = $conn->prepare($sqlInsertOrder);
@@ -28,7 +30,6 @@ if (isset($_POST['cartIDs']) && isset($_POST['grandTotal']) && isset($_POST['pro
     $orderID = $stmtInsertOrder->insert_id; 
     $stmtInsertOrder->close();
 
-    echo $concatCartID . "<br> Total: " . $grandTotal;
     foreach ($_POST['products'] as $productID => $details) {
         $productID = intval($productID);
         $quantity  = intval($details['quantity']);
@@ -43,7 +44,7 @@ if (isset($_POST['cartIDs']) && isset($_POST['grandTotal']) && isset($_POST['pro
         $stmtInsertOrderItems->close();
     }
 
-    if ($stmtRemoveCart && $stmtInsertOrder && $stmtInsertOrderItems) {
+    if ($stmtInsertOrder && $stmtInsertOrderItems) {
         header("Location: B-HomePage.php?message=Order placed successfully!");
         exit();
     }

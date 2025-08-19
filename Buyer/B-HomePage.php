@@ -543,6 +543,7 @@
                 <span><strong>Total:</strong> <span id="totalPrice">₱0.00</span></span>
 
                 <form id="checkoutForm" action="checkoutPage.php" method="post">
+                    <input type="hidden" name="mode" value="cart">
                     <button type="submit">Checkout</button>
                 </form>
             </div>

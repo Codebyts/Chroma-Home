@@ -221,6 +221,7 @@
                             </form>
                             <form id="buy" method="post" action="CheckoutPage.php">
                                 <input type="hidden" name="products[<?php echo $product['productID']; ?>]" value="1">
+                                <input type="hidden" name="mode" value="buynow">
                             </form>
                             <!-- MUST submit: grandTotal = productID, price -->
                             <!-- Already defined: quantity = 1, price = SQL -->
