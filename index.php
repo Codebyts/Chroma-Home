@@ -5,19 +5,37 @@
     session_start();
     include 'db.php'; 
 
+    $search = isset($_GET['search']) ? trim($_GET['search']) : '';
+
     if (isset($_SESSION['userID'])) {
-        // Logged-in seller — fetch only their products
         $sellerID = $_SESSION['userID'];
-        $sql = "SELECT productID, product_name, description, stock, categoryID, price, image, create_at 
-                FROM product 
-                WHERE sellerID = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("i", $sellerID);
+        if ($search !== '') {
+            $sql = "SELECT productID, product_name, description, stock, categoryID, price, image, create_at 
+                    FROM product 
+                    WHERE sellerID = ? AND product_name LIKE ?";
+            $stmt = $conn->prepare($sql);
+            $like = "%$search%";
+            $stmt->bind_param("is", $sellerID, $like);
+        } else {
+            $sql = "SELECT productID, product_name, description, stock, categoryID, price, image, create_at 
+                    FROM product 
+                    WHERE sellerID = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $sellerID);
+        }
     } else {
-        // Not logged in — fetch all products
-        $sql = "SELECT productID, product_name, description, stock, categoryID, price, image, create_at 
-                FROM product";
-        $stmt = $conn->prepare($sql);
+        if ($search !== '') {
+            $sql = "SELECT productID, product_name, description, stock, categoryID, price, image, create_at 
+                    FROM product
+                    WHERE product_name LIKE ?";
+            $stmt = $conn->prepare($sql);
+            $like = "%$search%";
+            $stmt->bind_param("s", $like);
+        } else {
+            $sql = "SELECT productID, product_name, description, stock, categoryID, price, image, create_at 
+                    FROM product";
+            $stmt = $conn->prepare($sql);
+        }
     }
 
     $stmt->execute(); 
@@ -237,10 +255,10 @@
     <!-- NAVBAR -->
     <section id="content">
         <nav>
-            <form>
+            <form method="GET" action="index.php" style="width:90%;margin-right:auto;">
                 <div class="form-group">
-                    <input type="text" placeholder="Search...">
-                    <i class="fas fa-solid fa-magnifying-glass"></i>
+                    <input type="text" name="search" placeholder="Search product name..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                    <button type="submit" style="padding:6px 12px; border-radius:6px; border:none; background:#007bff; color:white;">Search</button>
                 </div>
             </form>
 
@@ -252,14 +270,14 @@
 
         <!-- MAIN -->
         <main class="container-fluid py-3">
+            
             <!-- Product Cards -->
             <div class="row g-3 mt-4">
                 <?php
                 while ($row = $result->fetch_assoc()):?>
                     <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                        <div class="card h-100 text-center p-2">
-                            <a href="#" class="same-link">
-
+                        <div class="card h-100 text-center p-2" style="cursor:pointer;" onclick="window.location.href='LandingPage/LoginPage.php'">
+                            <a href="#" class="same-link" tabindex="-1" style="pointer-events:none;">
                                 <?php if (!empty($row['image'])): ?>
                                     <img src="uploads/products/<?php echo htmlspecialchars($row['image']); ?>" alt="Product" class="img-fluid rounded">
                                 <?php else: ?>
@@ -281,9 +299,19 @@
     <script src="GlobalFile/fontawesome-free-7.0.0-web/js/all.js"></script>
 
     <script>
-        const targetUrl = "LandingPage/LoginPage.php"; // destination file
-        document.querySelectorAll('.same-link').forEach(link => {
-            link.href = targetUrl;
+        document.querySelector('.same-link').href = "LandingPage/LoginPage.php";
+
+        // LIVE SEARCH FUNCTIONALITY
+        document.querySelector('input[name="search"]').addEventListener('input', function() {
+            const q = this.value.toLowerCase();
+            document.querySelectorAll('.card h2').forEach(function(h2) {
+                const card = h2.closest('.col-12');
+                if (h2.innerText.toLowerCase().includes(q)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
         });
     </script>
 </body>
