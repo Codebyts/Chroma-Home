@@ -227,10 +227,17 @@
 
                             <a href="FavoritePage/AddFavorite.php?productID=<?php echo $product['productID']; ?>"
                                 class="btn btn-outline-danger">❤</a>
-                            <button form="cart" class="btn btn-outline-danger w-50">Add To Cart</button>
-                            <button form="buy" class="btn btn-danger w-50">Buy Now ₱
-                                <?php echo number_format($product['price'], 2); ?>
-                            </button>
+                            <?php if ($product['stock'] === 0) { ?> 
+                                <button form="cart" class="btn btn-outline-danger w-50" disabled>Add To Cart</button>
+                                <button form="buy" class="btn btn-danger w-50" disabled>Buy Now ₱
+                                    <?php echo number_format($product['price'], 2); ?>
+                                </button>
+                            <?php } else { ?>
+                                <button form="cart" class="btn btn-outline-danger w-50">Add To Cart</button>
+                                <button form="buy" class="btn btn-danger w-50">Buy Now ₱
+                                    <?php echo number_format($product['price'], 2); ?>
+                                </button>
+                            <?php } ?>
                         </div>
                     </article>
                 </div>

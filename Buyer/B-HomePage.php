@@ -47,19 +47,20 @@
     if ($categoryFilter > 0) {
         $sql = "SELECT productID, product_name, description, stock, categoryID, price, image, create_at
                 FROM product
-                WHERE categoryID = ?";
+                WHERE categoryID = ? AND stock <> 0;";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $categoryFilter);
     } else {
         $sql = "SELECT productID, product_name, description, stock, categoryID, price, image, create_at
-                FROM product;";
+                FROM product
+                WHERE stock <> 0;";
         $stmt = $conn->prepare($sql);
     }
 
     $stmt->execute();
     $result = $stmt->get_result();
 
-    $sqlCart = "SELECT c.cartID, c.productID, c.quantity, p.product_name, p.price, p.image
+    $sqlCart = "SELECT c.cartID, c.productID, c.quantity, p.product_name, p.stock, p.price, p.image
                 FROM cart c 
                 JOIN product p ON c.productID = p.productID
                 WHERE c.userID = ?";
@@ -210,12 +211,173 @@
         background: #219150;
         }
 
+        .cart-summary button:disabled {
+            background-color: gray;
+            cursor: not-allowed;
+        }
+
         /* Background paragraph content */
         .content {
         margin-left: 220px;
         padding: 20px;
         }
     </style>
+
+    <!-- Checkbox Style -->
+    <style>
+        .checkbox-wrapper-19 {
+            box-sizing: border-box;
+            --background-color: #fff;
+            --checkbox-height: 25px;
+        }
+
+        @-moz-keyframes dothabottomcheck-19 {
+            0% {
+            height: 0;
+            }
+            100% {
+            height: calc(var(--checkbox-height) / 2);
+            }
+        }
+
+        @-webkit-keyframes dothabottomcheck-19 {
+            0% {
+            height: 0;
+            }
+            100% {
+            height: calc(var(--checkbox-height) / 2);
+            }
+        }
+
+        @keyframes dothabottomcheck-19 {
+            0% {
+            height: 0;
+            }
+            100% {
+            height: calc(var(--checkbox-height) / 2);
+            }
+        }
+
+        @keyframes dothatopcheck-19 {
+            0% {
+            height: 0;
+            }
+            50% {
+            height: 0;
+            }
+            100% {
+            height: calc(var(--checkbox-height) * 1.2);
+            }
+        }
+
+        @-webkit-keyframes dothatopcheck-19 {
+            0% {
+            height: 0;
+            }
+            50% {
+            height: 0;
+            }
+            100% {
+            height: calc(var(--checkbox-height) * 1.2);
+            }
+        }
+
+        @-moz-keyframes dothatopcheck-19 {
+            0% {
+            height: 0;
+            }
+            50% {
+            height: 0;
+            }
+            100% {
+            height: calc(var(--checkbox-height) * 1.2);
+            }
+        }
+
+        .checkbox-wrapper-19 input[type=checkbox] {
+            display: none;
+        }
+
+        .checkbox-wrapper-19 .check-box {
+            height: var(--checkbox-height);
+            width: var(--checkbox-height);
+            background-color: transparent;
+            border: calc(var(--checkbox-height) * .1) solid #000;
+            border-radius: 5px;
+            position: relative;
+            display: inline-block;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            -moz-transition: border-color ease 0.2s;
+            -o-transition: border-color ease 0.2s;
+            -webkit-transition: border-color ease 0.2s;
+            transition: border-color ease 0.2s;
+            cursor: pointer;
+        }
+        .checkbox-wrapper-19 .check-box::before,
+        .checkbox-wrapper-19 .check-box::after {
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            position: absolute;
+            height: 0;
+            width: calc(var(--checkbox-height) * .2);
+            background-color: #34b93d;
+            display: inline-block;
+            -moz-transform-origin: left top;
+            -ms-transform-origin: left top;
+            -o-transform-origin: left top;
+            -webkit-transform-origin: left top;
+            transform-origin: left top;
+            border-radius: 5px;
+            content: " ";
+            -webkit-transition: opacity ease 0.5;
+            -moz-transition: opacity ease 0.5;
+            transition: opacity ease 0.5;
+        }
+        .checkbox-wrapper-19 .check-box::before {
+            top: calc(var(--checkbox-height) * .72);
+            left: calc(var(--checkbox-height) * .41);
+            box-shadow: 0 0 0 calc(var(--checkbox-height) * .05) var(--background-color);
+            -moz-transform: rotate(-135deg);
+            -ms-transform: rotate(-135deg);
+            -o-transform: rotate(-135deg);
+            -webkit-transform: rotate(-135deg);
+            transform: rotate(-135deg);
+        }
+        .checkbox-wrapper-19 .check-box::after {
+            top: calc(var(--checkbox-height) * .37);
+            left: calc(var(--checkbox-height) * .05);
+            -moz-transform: rotate(-45deg);
+            -ms-transform: rotate(-45deg);
+            -o-transform: rotate(-45deg);
+            -webkit-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+        }
+
+        .checkbox-wrapper-19 input[type=checkbox]:checked + .check-box,
+        .checkbox-wrapper-19 .check-box.checked {
+            border-color: #34b93d;
+        }
+        .checkbox-wrapper-19 input[type=checkbox]:checked + .check-box::after,
+        .checkbox-wrapper-19 .check-box.checked::after {
+            height: calc(var(--checkbox-height) / 2);
+            -moz-animation: dothabottomcheck-19 0.2s ease 0s forwards;
+            -o-animation: dothabottomcheck-19 0.2s ease 0s forwards;
+            -webkit-animation: dothabottomcheck-19 0.2s ease 0s forwards;
+            animation: dothabottomcheck-19 0.2s ease 0s forwards;
+        }
+        .checkbox-wrapper-19 input[type=checkbox]:checked + .check-box::before,
+        .checkbox-wrapper-19 .check-box.checked::before {
+            height: calc(var(--checkbox-height) * 1.2);
+            -moz-animation: dothatopcheck-19 0.4s ease 0s forwards;
+            -o-animation: dothatopcheck-19 0.4s ease 0s forwards;
+            -webkit-animation: dothatopcheck-19 0.4s ease 0s forwards;
+            animation: dothatopcheck-19 0.4s ease 0s forwards;
+        }
+    </style>
+
 </head>
 
 <body onload="showAlert()">
@@ -318,34 +480,50 @@
 
             <!-- Scrollable products -->
             <div class="product-list">
-                <?php while ($row = $resultCart->fetch_assoc()): ?>
+                <?php while ($row = $resultCart->fetch_assoc()) { ?>
                     <label class="product">
                         <?php if (!empty($row['image'])): ?>
-                            <input type="checkbox" class="item" 
-                                   data-id="<?php echo $row['productID']?>" data-price="<?php echo $row['price']?>"
-                                   onchange="calculateTotal()"
-                                   value="<?php echo $row['productID']?>">
+                            <div class="checkbox-wrapper-19">
+                                <?php if ($row['stock'] === 0) { ?>
+                                    <input type="checkbox" id="product<?php echo $row['productID']?>" class="item" data-id="<?php echo $row['productID']?>" data-price="<?php echo $row['price']?>" onchange="calculateTotal()" value="<?php echo $row['productID']?>" disabled>
+                                    <label for="product<?php echo $row['productID']?>" class="check-box">
+                                <?php } else { ?>
+                                    <input type="checkbox" id="product<?php echo $row['productID']?>" class="item" data-id="<?php echo $row['productID']?>" data-price="<?php echo $row['price']?>" onchange="calculateTotal()" value="<?php echo $row['productID']?>">
+                                    <label for="product<?php echo $row['productID']?>" class="check-box">
+                                <?php } ?>
+                            </div>
                             <img src="../uploads/products/<?php echo htmlspecialchars($row['image']); ?>" alt="Product" class="img-fluid rounded">
                         <?php else: ?>
                             <img src="../uploads/products/no-image.png" alt="No Image">
                         <?php endif; ?>
+                        
                         <div class="product-info">
                             <h3><?php echo $row['product_name']?></h3>
-                            <label for="quantity">Quantity:</label>
-                            <input type="number" step="1" name="quantity" id="quantity" min="1"
-                                   value="<?php echo $row['quantity']?>" oninput="calculateTotal()" required>
+                            <?php if ($row['stock'] <= 0) { ?>
+                                <p class="text-danger">OUT OF STOCK</p>
+                            <?php } else if ($row['stock'] <= 10) { ?>
+                                <p><?php echo $row['stock']?> stocks left </p>
+                                <label for="quantity">Quantity: </label>
+                                <input type="number" step="1" name="quantity" id="quantity" min="1" 
+                                       value="<?php echo $row['quantity']?>" oninput="calculateTotal()" 
+                                       max="<?php echo $row['stock']?>" required> <br>
+                            <?php } else { ?>
+                                <label for="quantity">Quantity: </label>
+                                <input type="number" step="1" name="quantity" id="quantity" min="1" 
+                                       value="<?php echo $row['quantity']?>" oninput="enforceMax(this);calculateTotal()" 
+                                       max="<?php echo $row['stock']?>" required> <br>
+                            <?php } ?>
 
                             <input type="hidden" name="products[<?php echo $row['productID']?>]" id="quantity_<?php echo $row['productID']?>" form="checkoutForm">
 
                             <strong>₱<?php echo number_format($row['price'], 2)?></strong>
                         </div>
                     </label>
-                <?php endwhile; ?>
+                <?php } ?>
             </div>
 
             <!-- Fixed bottom -->
             <div class="cart-summary">
-                
                 <span><strong>Total:</strong> <span id="totalPrice">₱0.00</span></span>
 
                 <form id="checkoutForm" action="checkoutPage.php" method="post">
@@ -397,6 +575,17 @@
             }
         });
 
+        const checkoutBtn = document.querySelector('#checkoutForm button[type="submit"]');
+        const checkboxes = document.querySelectorAll('input.item[type="checkbox"]');
+
+        function toggleCheckoutButton() {
+            const anyChecked = Array.from(checkboxes).some(cb => cb.checked);
+            checkoutBtn.disabled = !anyChecked;
+        }
+
+        checkboxes.forEach(cb => cb.addEventListener('change', toggleCheckoutButton));
+        toggleCheckoutButton();
+
         // For normal links (Home, Favorite, etc.)
         menuItems.forEach(item => {
             if (item.id !== "cartBtn") { // exclude Cart
@@ -406,6 +595,16 @@
             }
         });
 
+        function enforceMax(input) {
+            const max = parseInt(input.max);
+            const value = parseInt(input.value) || 0;
+
+            if (value > max) {
+                input.value = max;
+            } else if (value < parseInt(input.min)) {
+                input.value = input.min;
+            }
+        }
         function calculateTotal() {
             let total = 0;
             let products = document.querySelectorAll('.product');

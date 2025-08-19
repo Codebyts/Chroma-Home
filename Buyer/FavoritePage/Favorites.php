@@ -105,7 +105,11 @@
                                 <?php endif; ?>
                                 <hr>
                                 <h2><?php echo htmlspecialchars($row['product_name']); ?></h2>
-                                <p>₱<?php echo number_format($row['price'], 2); ?></p>
+                                <?php if ($row['stock'] === 0) { ?>
+                                    <p class="text-danger">OUT OF STOCK</p>
+                                <?php } else { ?>
+                                    <p>₱<?php echo number_format($row['price'], 2); ?></p>
+                                <?php } ?>
                             </a>
                             <form action="AddFavorite.php" method="post">
                                 <input type="hidden" name="productID" value="<?php echo $row['productID']; ?>">
