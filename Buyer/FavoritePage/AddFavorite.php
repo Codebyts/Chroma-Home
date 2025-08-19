@@ -11,11 +11,24 @@ if (!isset($_SESSION['userID'])) {
 $userID = $_SESSION['userID'];
 $productID = (int)$_GET['productID'];
 
+$sqlCheckFavorite = "SELECT * FROM favorites WHERE userID = ? AND productID = ?";
+$stmtCheckFavorite = $conn->prepare($sqlCheckFavorite);
+$stmtCheckFavorite->bind_param("ii", $userID, $productID);
+$stmtCheckFavorite->execute();
+$resultCheck = $stmtCheckFavorite->get_result();
+if ($resultCheck->num_rows > 0) {
+    header("Location: ../ProductDetails.php?productID=$productID&message=Product already in favorites.");
+    exit();
+} else {
+    $sql = "INSERT IGNORE INTO favorites (userID, productID) VALUES (?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ii", $userID, $productID);
+    $stmt->execute();
+    header("Location: Favorites.php?message=Product added to favorites.");
+}
 // Insert only if not already favorited
-$sql = "INSERT IGNORE INTO favorites (userID, productID) VALUES (?, ?)";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("ii", $userID, $productID);
-$stmt->execute();
+
+
 
 // Removing a product from favorites
 if(isset($_POST['productID']) && $_POST['status'] === 'favorite') {
@@ -34,9 +47,5 @@ if(isset($_POST['productID']) && $_POST['status'] === 'favorite') {
         //Edit message variable for popup dialogue
         exit();
     }
-}
-
-// Redirect to favorites page
-header("Location: Favorites.php");
-exit();
+} 
 ?>
