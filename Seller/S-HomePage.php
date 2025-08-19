@@ -18,9 +18,10 @@
     $sellerName = $user ? $user['name'] : "Seller";
 
     // Fetch products
-    $sql = "SELECT productID, product_name, description, stock, categoryID, price, image, create_at
-            FROM product 
-            WHERE sellerID = ?";
+    $sql = "SELECT p.productID, p.product_name, p.description, p.stock, p.categoryID, p.price, p.image, p.create_at, c.categoryName
+        FROM product p
+        JOIN category c ON p.categoryID = c.categoryID
+        WHERE p.sellerID = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $sellerID);
     $stmt->execute();
@@ -231,7 +232,7 @@
                 <button class="desc-btn" data-description="<?php echo $fullDesc; ?>" onclick="openModal(this)">📖 View Full</button>
                 <?php endif; ?>
                 <div class="product-meta">📦 Stock: <?php echo htmlspecialchars($row['stock']); ?></div>
-                <div class="product-meta">📂 Category: <?php echo htmlspecialchars($row['categoryID']); ?></div>
+                <div class="product-meta">📂 Category: <?php echo htmlspecialchars($row['name']); ?></div>
                 <div class="product-meta">📅 Added: <?php echo htmlspecialchars($row['create_at']); ?></div>
                 <div class="product-price">💰 ₱<?php echo number_format($row['price'],2); ?></div>
             </div>
